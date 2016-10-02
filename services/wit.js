@@ -3,7 +3,8 @@
 var Config = require('../config')
 var FB = require('../connectors/facebook')
 var request = require('request')
-const {Wit, log} = require('node-wit');
+var sessions = require('../bot').sessions
+const {Wit, log} = require('node-wit')
 
 
 var firstEntityValue = function (entities, entity) {
@@ -20,36 +21,59 @@ var firstEntityValue = function (entities, entity) {
 
 
 var actions = {
-	send (request, response) {
-		return new Promise(function(resolve, reject) {
-			console.log(JSON.stringify(response));
-			return resolve();
-		});
-	},
+	send ({sessionId}, {text}) {
+    // Our bot has something to say!
+    // Let's retrieve the Facebook user whose session belongs to
+    const recipientId = sessions[sessionId].fbid;
+    if (recipientId) {
+      // Yay, we found our recipient!
+      // Let's forward our bot response to her.
+      // We return a promise to let our bot know when we're done sending
+      return FB.newMessage(recipientId, text)
+      .then(() => null)
+      .catch((err) => {
+      	console.error(
+      		'Oops! An error occurred while forwarding the response to',
+      		recipientId,
+      		':',
+      		err.stack || err
+      		);
+      });
+    } else {
+      console.error('Oops! Couldn\'t find user for session:', sessionId);
+      // Giving the wheel back to our bot
+      return Promise.resolve()
+    }
+  },
 
-	say (sessionId, context, message, cb) {
-		// Bot testing mode, run cb() and return
-		if (require.main === module) {
-			cb()
-			return
-		}
 
-		console.log('WIT WANTS TO TALK TO:', context._fbid_)
-		console.log('WIT HAS SOMETHING TO SAY:', message)
-		console.log('WIT HAS A CONTEXT:', context)
+	// say (sessionId, context, message, cb) {
+	// 	// Bot testing mode, run cb() and return
+	// 	if (require.main === module) {
+	// 		cb()
+	// 		return
+	// 	}
 
-		if (checkURL(message)) {
-			FB.newMessage(context._fbid_, message, true)
-		} else {
-			FB.newMessage(context._fbid_, message)
-		}
+	// 	console.log('WIT WANTS TO TALK TO:', context._fbid_)
+	// 	console.log('WIT HAS SOMETHING TO SAY:', message)
+	// 	console.log('WIT HAS A CONTEXT:', context)
 
-		
-		cb()
-		
-	},
+	// 	if (checkURL(message)) {
+	// 		FB.newMessage(context._fbid_, message, true)
+	// 	} else {
+	// 		FB.newMessage(context._fbid_, message)
+	// 	}
 
-	merge(sessionId, context, entities, message, cb) {
+
+	// 	cb()
+
+	// },
+
+	merge({sessionId, context, entities, message}) {
+    console.log(`Session ${sessionId} received ${text}`);
+    console.log(`The current context is ${JSON.stringify(context)}`);
+    console.log(`Wit extracted ${JSON.stringify(entities)}`);
+
 		// Reset the weather story
 		delete context.forecast
 
@@ -76,15 +100,15 @@ var actions = {
 			delete context.ack
 		}
 
-		cb(context)
+    return Promise.resolve(context);
 	},
 
-	error(sessionId, context, error) {
+	error({sessionId, context, error}) {
 		console.log(error.message)
 	},
 
 	// list of functions Wit.ai can execute
-	['fetch-weather'](sessionId, context, cb) {
+	['fetch-weather']({sessionId, context}) {
 		// Here we can place an API call to a weather service
 		// if (context.loc) {
 		// 	getWeather(context.loc)
@@ -97,25 +121,25 @@ var actions = {
 		// }
 
 		context.forecast = 'Sunny'
+    return Promise.resolve(context);
 
-		cb(context)
 	},
 
-	['fetch-pics'](sessionId, context, cb) {
+	['fetch-pics']({sessionId, context}) {
 		var wantedPics = allPics[context.cat || 'default']
 		context.pics = wantedPics[Math.floor(Math.random() * wantedPics.length)]
+    return Promise.resolve(context);
 
-		cb(context)
 	},
 }
 
 // SETUP THE WIT.AI SERVICE
 var getWit = function () {
-	console.log('GRABBING WIT: ', Config.WIT_TOKEN)
+	console.log('GRABBING WIT')
 	return new Wit({
-		accessToken: Config.WIT_TOKEN, 
-		actions,   
-		logger: new log.Logger(log.DEBUG) 
+		accessToken: Config.WIT_TOKEN,
+		actions,
+		logger: new log.Logger(log.DEBUG)
 	})
 }
 
