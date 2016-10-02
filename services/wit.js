@@ -20,6 +20,13 @@ var firstEntityValue = function (entities, entity) {
 
 
 var actions = {
+	send (request, response) {
+		return new Promise(function(resolve, reject) {
+			console.log(JSON.stringify(response));
+			return resolve();
+		});
+	},
+
 	say (sessionId, context, message, cb) {
 		// Bot testing mode, run cb() and return
 		if (require.main === module) {
