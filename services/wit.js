@@ -37,17 +37,17 @@ var actions = {
       if (text === 'hello') {
         resText = 'Hello yourself! I am a chat bot. You can say "show me pics of corgis"'
         return FB.newMessage(recipientId, resText)
-        .then(() => null).catch(errorHandler);
+        .then(() => null).catch(errorHandler)
 
       } else if (checkURL(resText)) {  // check if resText contains image url
 
         return FB.newMessage(recipientId, resText, true)
-        .then(() => null).catch(errorHandler);
+        .then(() => null).catch(errorHandler)
 
       } else {
 
         return FB.newMessage(recipientId, resText)
-        .then(() => null).catch(errorHandler);
+        .then(() => null).catch(errorHandler)
       }
 
     } else {
@@ -148,13 +148,13 @@ if (require.main === module) {
 // GET WEATHER FROM API
 var getWeather = function (location) {
 	return new Promise(function (resolve, reject) {
-		var url = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22'+ location +'%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys'
+		var url = 'http://api.openweathermap.org/data/2.5/weather?q=' + location + '&appid=' + Config.OPEN_WEATHER_API_KEY
 		request(url, function (error, response, body) {
 		    if (!error && response.statusCode == 200) {
 		    	var jsonData = JSON.parse(body)
-		    	var forecast = jsonData.query.results ? jsonData.query.results.channel.item.forecast[0].text : null;
-		      console.log('WEATHER API SAYS....', jsonData.query.results)
-		      return forecast
+		    	var forecast = jsonData.weather ? jsonData.weather[0].description : null;
+		      console.log('WEATHER API SAYS....', forecast)
+		      resolve(forecast);
 		    }
 			})
 	})
