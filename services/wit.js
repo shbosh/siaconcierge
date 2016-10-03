@@ -3,7 +3,7 @@
 var Config = require('../config')
 var FB = require('../connectors/facebook')
 var request = require('request')
-const {Wit, log} = require('node-wit')
+const {Wit, log} = require('node-wit') // Es6, 'const' is a var that cannot be reassigned, 'let' can be.
 
 var firstEntityValue = function (entities, entity) {
 	var val = entities && entities[entity] &&
@@ -19,17 +19,17 @@ var firstEntityValue = function (entities, entity) {
 
 
 var actions = {
-  // Compulsory method, destructure sessionId from request object, ie var sessionId = request.sessionId;
-  // https://github.com/wit-ai/node-wit#wit-class
+
+  // Compulsory method - https://github.com/wit-ai/node-wit#wit-class
   // :param request: contains sessionId, context, message, entities properties
   // :param response: contains text, quickreplies properties
+	send ({sessionId, context}, {text}) { // Destructure sessionId from request object, ie var sessionId = request.sessionId;
 
-	send ({sessionId, context}, {text}) {
     // Our bot has a reply! Let's retrieve the Facebook user whose session belongs to
     const recipientId = context._fbid_;
     if (recipientId) {
 
-      // We return a promise to let our bot know when we're done sending
+      // We return a js promise to let our bot know when we're done sending
 
       if (checkURL(text)) {  // check if text contains image url
 
@@ -49,6 +49,7 @@ var actions = {
     }
   },
 
+  // Merge action as found on wit.ai story, returns a js promise with new context
 	merge({sessionId, context, message, entities}) {
     console.log(`Session ${sessionId} received`);
     console.log(`The current context is ${JSON.stringify(context)}`);
@@ -93,7 +94,7 @@ var actions = {
 		if (context.loc) {
 			getWeather(context.loc)
 				.then(function (forecast) {
-					context.forecast = forecast || 'Maybe Sunny'
+					context.forecast = forecast || 'Maybe Sunny?'
 				})
 				.catch(function (err) {
 					console.log(err)
@@ -141,8 +142,8 @@ var getWeather = function (location) {
 		request(url, function (error, response, body) {
 		    if (!error && response.statusCode == 200) {
 		    	var jsonData = JSON.parse(body)
-		    	var forecast = jsonData.query.results.channel.item.forecast[0].text
-		      console.log('WEATHER API SAYS....', jsonData.query.results.channel.item.forecast[0].text)
+		    	var forecast = jsonData.query.results ? jsonData.query.results.channel.item.forecast[0].text : null;
+		      console.log('WEATHER API SAYS....', forecast)
 		      return forecast
 		    }
 			})

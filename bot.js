@@ -39,23 +39,22 @@ var read = function (sender, message, reply) {
 	} else {
 		// Let's find the user
 		var sessionId = findOrCreateSession(sender)
-		// Let's forward the message to the Wit.ai bot engine
-		// This will run all actions until there are no more actions left to do
-    // Wit.ai sends replies to messenger, see wit.js, params below are available in methods
+		// Let's forward the message to the Wit.ai bot engine - runs all actions (as in wit.ai story) until no more
+    // See ./services/wit.js, params in runActions below are available in methods
+
 		wit.runActions(
 			sessionId,                   // :sessionId:, the user's current session by id
 			message,                     // :message:, the user's message
 			sessions[sessionId].context  // :context:, the user's session state
-		).then(context=> { // callback
-				// Wit.ai ran all the actions
-				// Now it needs more messages
+		).then(context=> {
+				// Wit.ai ran all the actions in cycle, now it needs more messages
 				console.log('Waiting for further messages')
 
 				// Based on the session state, you might want to reset the session
-				// Example:
-				// if (context['done']) {
-				// 	delete sessions[sessionId]
-				// }
+  				// Example:
+  				// if (context['done']) {
+  				// 	delete sessions[sessionId]
+  				// }
 
 				// Updating the user's current session state
 				sessions[sessionId].context = context

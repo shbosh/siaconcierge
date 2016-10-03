@@ -4,87 +4,6 @@ var request = require('request')
 var Config = require('../config')
 const fetch = require('node-fetch');
 
-// SETUP A REQUEST TO FACEBOOK SERVER
-var newRequest = request.defaults({
-	uri: 'https://graph.facebook.com/v2.6/me/messages',
-	method: 'POST',
-	json: true,
-	qs: {
-		access_token: Config.FB_PAGE_TOKEN
-	},
-	headers: {
-		'Content-Type': 'application/json'
-	},
-})
-
-// SETUP A MESSAGE FOR THE FACEBOOK REQUEST
-// var newMessage = function (recipientId, msg, atts, cb) {
-// 	var opts = {
-// 		form: {
-// 			recipient: {
-// 				id: recipientId
-// 			},
-// 		}
-// 	}
-
-	// https://developers.facebook.com/docs/messenger-platform/send-api-reference
-
-	// FOR IMAGES
-  	// "message":{
-  	//    "attachment":{
-  	//      "type":"image",
-  	//      "payload":{
-  	//        "url":"https://petersapparel.com/img/shirt.png"
-  	//      }
-  	//    }
-  	//  }
-
-	// FOR TEMPLATES
-  	// "message":{
-  	//   "attachment":{
-  	//     "type":"template",
-  	//     "payload":{
-  	//       "template_type":"button",
-  	//       "text":"What do you want to do next?",
-  	//       "buttons":[
-  	//         {
-  	//           "type":"web_url",
-  	//           "url":"https://petersapparel.parseapp.com",
-  	//           "title":"Show Website"
-  	//         },
-  	//         {
-  	//           "type":"postback",
-  	//           "title":"Start Chatting",
-  	//           "payload":"USER_DEFINED_PAYLOAD"
-  	//         }
-  	//       ]
-  	//     }
-  	//   }
-  	// }
-
-// 	if (atts) {
-// 		var message = {
-// 			attachment: {
-// 				"type": "image",
-// 				"payload": {
-// 					"url": msg
-// 				}
-// 			}
-// 		}
-// 	} else {
-// 		var message = {
-// 			text: msg
-// 		}
-// 	}
-// 	opts.form.message = message
-
-// 	return newRequest(opts, function (err, resp, data) {
-// 		if (cb) {
-// 			cb(err || data.error && data.error.message, data)
-// 		}
-// 	})
-// }
-
 // PARSE A FACEBOOK MESSAGE to get user, message body, or attachment
 // https://developers.facebook.com/docs/messenger-platform/webhook-reference
 var getMessageEntry = function (body) {
@@ -100,6 +19,7 @@ var getMessageEntry = function (body) {
 	return val || null
 }
 
+// SETUP A REQUEST TO FACEBOOK SERVER
 var newMessage = function(recipientId, msg, hasAtts, cb) {
 
   let message;
@@ -116,9 +36,44 @@ var newMessage = function(recipientId, msg, hasAtts, cb) {
     message = { text: msg }
   }
 
+  // https://developers.facebook.com/docs/messenger-platform/send-api-reference
+
+  // FOR IMAGES
+    // "message":{
+    //    "attachment":{
+    //      "type":"image",
+    //      "payload":{
+    //        "url":"https://petersapparel.com/img/shirt.png"
+    //      }
+    //    }
+    //  }
+
+  // FOR TEMPLATES
+    // "message":{
+    //   "attachment":{
+    //     "type":"template",
+    //     "payload":{
+    //       "template_type":"button",
+    //       "text":"What do you want to do next?",
+    //       "buttons":[
+    //         {
+    //           "type":"web_url",
+    //           "url":"https://petersapparel.parseapp.com",
+    //           "title":"Show Website"
+    //         },
+    //         {
+    //           "type":"postback",
+    //           "title":"Start Chatting",
+    //           "payload":"USER_DEFINED_PAYLOAD"
+    //         }
+    //       ]
+    //     }
+    //   }
+    // }
+
   const body = JSON.stringify({
     recipient: { id: recipientId },
-    message: message,
+    message, // es6 syntax, same as - message: message,
   });
 
   const qs = 'access_token=' + encodeURIComponent(Config.FB_PAGE_TOKEN);
@@ -137,7 +92,6 @@ var newMessage = function(recipientId, msg, hasAtts, cb) {
 }
 
 module.exports = {
-	newRequest: newRequest,
 	newMessage: newMessage,
 	getMessageEntry: getMessageEntry,
 }

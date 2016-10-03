@@ -43,6 +43,7 @@ app.post('/webhook', function (req, res) {
       FB.newMessage(entry.sender.id, "That's interesting!")
     } else {
       // SEND TO BOT FOR PROCESSING, WIT.AI SENDS POST REQ, NOT SERVER
+      // see ./bot.js
       Bot.read(entry.sender.id, entry.message.text, (sender, reply) => FB.newMessage(sender, reply))
     }
   }
