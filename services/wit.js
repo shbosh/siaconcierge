@@ -44,15 +44,19 @@ var actions = {
   // :param request: contains sessionId, context, message, entities properties
   // :param response: contains text, quickreplies properties
 
-	send ({sessionId}, {text}) {
+	send (request, response) {
     // Our bot has something to say!
     // Let's retrieve the Facebook user whose session belongs to
+    console.log(response)
+    console.log(request)
+    var sessionId = request.sessionId;
+
     const recipientId = sessions[sessionId].fbid;
     if (recipientId) {
       // Yay, we found our recipient!
       // Let's forward our bot response to her.
       // We return a promise to let our bot know when we're done sending
-      return fbMessage(recipientId, text)
+      return fbMessage(recipientId, 'hello')
       .then(() => null)
       .catch((err) => {
       	console.error(
