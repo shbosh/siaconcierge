@@ -7,6 +7,7 @@ const fetch = require('node-fetch');
 // PARSE A FACEBOOK MESSAGE to get user, message body, or attachment
 // https://developers.facebook.com/docs/messenger-platform/webhook-reference
 var getMessageEntry = function (body) {
+  console.log(body.entry[0].messaging)
 	var val = body.object === 'page' &&
 						body.entry &&
 						Array.isArray(body.entry) &&

@@ -41,7 +41,7 @@ var read = function (sender, message) {
 	// Let's find or create a session for the user
   var sessionId = findOrCreateSession(sender)
 
-		// Let's forward the message to the Wit.ai bot engine - runs all actions (as in wit.ai story) until no more
+		// Wit.ai bot engine reads - then runs all actions incl send (as in wit.ai story) until no more
     // See ./services/wit.js, params in runActions below are available in methods
 
 		wit.runActions(

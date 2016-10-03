@@ -104,7 +104,7 @@ var actions = {
       return new Promise((resolve, reject) => {
   			getWeather(context.loc) // loc is the property given in the wit.ai story
         .then(function (forecast) {
-          context.forecast = forecast || 'Maybe Sunny?'
+          context.forecast = forecast.charAt(0).toUpperCase() + string.slice(1) || 'I\'m unsure of the weather'
           resolve(context);
         })
         .catch(function (err) {
@@ -153,7 +153,6 @@ var getWeather = function (location) {
 		    if (!error && response.statusCode == 200) {
 		    	var jsonData = JSON.parse(body)
 		    	var forecast = jsonData.weather ? jsonData.weather[0].description : null;
-		      console.log('WEATHER API SAYS....', forecast)
 		      resolve(forecast);
 		    }
 			})
