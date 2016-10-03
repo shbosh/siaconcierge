@@ -96,7 +96,7 @@ var actions = {
 	['fetch-weather']({sessionId, context}) {
 		// Here we can place an API call to a weather service
 		if (context.loc) {
-			getWeather(context.loc)
+			getWeather(context.loc) // loc is the property given in the wit.ai story
 				.then(function (forecast) {
 					context.forecast = forecast || 'Maybe Sunny?'
 				})
@@ -147,7 +147,7 @@ var getWeather = function (location) {
 		    if (!error && response.statusCode == 200) {
 		    	var jsonData = JSON.parse(body)
 		    	var forecast = jsonData.query.results ? jsonData.query.results.channel.item.forecast[0].text : null;
-		      console.log('WEATHER API SAYS....', forecast)
+		      console.log('WEATHER API SAYS....', jsonData.query.results)
 		      return forecast
 		    }
 			})
