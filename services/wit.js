@@ -17,33 +17,37 @@ var firstEntityValue = function (entities, entity) {
 	return typeof val === 'object' ? val.value : val
 }
 
-
+var errorHandler = err => console.error( 'Error messaging', recipientId, ':', err.stack || err );
 var actions = {
 
   // Compulsory method - https://github.com/wit-ai/node-wit#wit-class
   // :param request: contains sessionId, context, text, entities properties
   // :param response: contains text, quickreplies properties
 	send ({sessionId, context, text}, {text: resText}) { // Destructure sessionId from request object, ie var sessionId = request.sessionId;
-
     console.log('WIT WANTS TO TALK TO:', context._fbid_)
     console.log('WIT HAS SOMETHING TO SAY:', resText)
     console.log('WIT HAS A CONTEXT:', context)
 
     // Our bot has a reply! Let's retrieve the Facebook user whose session belongs to
     const recipientId = context._fbid_;
-    if (recipientId) {
 
+    if (recipientId) {
       // We return a js promise to let our bot know when we're done sending
 
-      if (checkURL(resText)) {  // check if resText contains image url
+      if (text === 'hello') {
+        resText = 'Hello yourself! I am a chat bot. You can say "show me pics of corgis"'
+        return FB.newMessage(recipientId, resText)
+        .then(() => null).catch(errorHandler);
+
+      } else if (checkURL(resText)) {  // check if resText contains image url
 
         return FB.newMessage(recipientId, resText, true)
-        .then(() => null)
-        .catch(err => console.error( 'Error messaging', recipientId, ':', err.stack || err ));
+        .then(() => null).catch(errorHandler);
+
       } else {
+
         return FB.newMessage(recipientId, resText)
-        .then(() => null)
-        .catch(err => console.error( 'Error messaging', recipientId, ':', err.stack || err ));
+        .then(() => null).catch(errorHandler);
       }
 
     } else {
@@ -98,15 +102,14 @@ var actions = {
 		if (context.loc) {
 			getWeather(context.loc) // loc is the property given in the wit.ai story
 				.then(function (forecast) {
-					context.forecast = forecast || 'Maybe Sunny?'
+          context.forecast = forecast || 'Maybe Sunny?'
+          console.log(forecast)
+          return Promise.resolve(context);
 				})
 				.catch(function (err) {
 					console.log(err)
 				})
 		}
-
-		// context.forecast = 'Sunny'
-    return Promise.resolve(context);
 
 	},
 

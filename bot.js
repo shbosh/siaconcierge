@@ -14,7 +14,7 @@ var findOrCreateSession = function (fbid) {
     if (sessions[k].fbid === fbid) {
       // YUP
       sessionId = k
-      console.log('user exists', fbid)
+      console.log('user exists:', fbid)
     }
   })
 
@@ -27,18 +27,13 @@ var findOrCreateSession = function (fbid) {
         _fbid_: fbid
       }
     }
-    console.log('user does not exists, created session', fbid)
+    console.log('user does not exists, created session for ', fbid)
   }
 
   return sessionId
 }
 
-var read = function (sender, message, newMessage) {
-	if (message === 'hello') {
-		// Let's reply back hello
-		message = 'Hello yourself! I am a chat bot. You can say "show me pics of corgis"'
-		newMessage(sender, message)
-	} else {
+var read = function (sender, message) {
 		// Let's find the user
 		var sessionId = findOrCreateSession(sender)
 		// Let's forward the message to the Wit.ai bot engine - runs all actions (as in wit.ai story) until no more
@@ -64,7 +59,7 @@ var read = function (sender, message, newMessage) {
 		}).catch((err) => {
       console.error('Oops! Got an error from Wit: ', err.stack || err);
     })
-	}
+
 }
 
 
