@@ -38,6 +38,9 @@ var read = function (sender, message, reply) {
 		reply(sender, message)
 	} else {
 		// Let's find the user
+    console.log('sender', sender)
+    console.log('message', message)
+    console.log('reply', reply)
 		var sessionId = findOrCreateSession(sender)
 		// Let's forward the message to the Wit.ai bot engine
 		// This will run all actions until there are no more actions left to do
