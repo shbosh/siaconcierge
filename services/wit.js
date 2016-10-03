@@ -3,28 +3,7 @@
 var Config = require('../config')
 var FB = require('../connectors/facebook')
 var request = require('request')
-var sessions = require('../bot').sessions
 const {Wit, log} = require('node-wit')
-
-const fbMessage = (id, text) => {
-  const body = JSON.stringify({
-    recipient: { id },
-    message: { text },
-  });
-  const qs = 'access_token=' + encodeURIComponent(FB_PAGE_TOKEN);
-  return fetch('https://graph.facebook.com/me/messages?' + qs, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body,
-  })
-  .then(rsp => rsp.json())
-  .then(json => {
-    if (json.error && json.error.message) {
-      throw new Error(json.error.message);
-    }
-    return json;
-  });
-};
 
 var firstEntityValue = function (entities, entity) {
 	var val = entities && entities[entity] &&
@@ -41,31 +20,28 @@ var firstEntityValue = function (entities, entity) {
 
 var actions = {
   // Compulsory method, destructure sessionId from request object, ie var sessionId = request.sessionId;
+  // https://github.com/wit-ai/node-wit#wit-class
   // :param request: contains sessionId, context, message, entities properties
   // :param response: contains text, quickreplies properties
 
-	send (request, response) {
-    // Our bot has something to say!
-    // Let's retrieve the Facebook user whose session belongs to
-    console.log(response)
-    console.log(request)
-    var sessionId = request.sessionId;
-
-    const recipientId = sessions[sessionId].fbid;
+	send ({sessionId, context}, {text}) {
+    // Our bot has a reply! Let's retrieve the Facebook user whose session belongs to
+    const recipientId = context._fbid_;
     if (recipientId) {
-      // Yay, we found our recipient!
-      // Let's forward our bot response to her.
+
       // We return a promise to let our bot know when we're done sending
-      return fbMessage(recipientId, 'hello')
-      .then(() => null)
-      .catch((err) => {
-      	console.error(
-      		'Oops! An error occurred while forwarding the response to',
-      		recipientId,
-      		':',
-      		err.stack || err
-      		);
-      });
+
+      if (checkURL(text)) {  // check if text contains image url
+
+        return FB.newMessage(context._fbid_, text, true)
+        .then(() => null)
+        .catch(err => console.error( 'Error messaging', recipientId, ':', err.stack || err ));
+      } else {
+        return FB.newMessage(context._fbid_, text)
+        .then(() => null)
+        .catch(err => console.error( 'Error messaging', recipientId, ':', err.stack || err ));
+      }
+
     } else {
       console.error('Oops! Couldn\'t find user for session:', sessionId);
       // Giving the wheel back to our bot
@@ -74,7 +50,7 @@ var actions = {
   },
 
 	merge({sessionId, context, message, entities}) {
-    console.log(`Session ${sessionId} received ${text}`);
+    console.log(`Session ${sessionId} received`);
     console.log(`The current context is ${JSON.stringify(context)}`);
     console.log(`Wit extracted ${JSON.stringify(entities)}`);
 

@@ -41,11 +41,11 @@ var read = function (sender, message, reply) {
 		var sessionId = findOrCreateSession(sender)
 		// Let's forward the message to the Wit.ai bot engine
 		// This will run all actions until there are no more actions left to do
-    // Wit.ai sends replies to messenger, see wit.js
+    // Wit.ai sends replies to messenger, see wit.js, params below are available in methods
 		wit.runActions(
-			sessionId, // the user's current session by id
-			message,  // the user's message
-			sessions[sessionId].context // the user's session state
+			sessionId,                   // :sessionId:, the user's current session by id
+			message,                     // :message:, the user's message
+			sessions[sessionId].context  // :context:, the user's session state
 		).then(context=> { // callback
 				// Wit.ai ran all the actions
 				// Now it needs more messages
@@ -71,5 +71,4 @@ var read = function (sender, message, reply) {
 module.exports = {
 	findOrCreateSession: findOrCreateSession,
 	read: read,
-  sessions
 }

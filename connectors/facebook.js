@@ -17,72 +17,72 @@ var newRequest = request.defaults({
 })
 
 // SETUP A MESSAGE FOR THE FACEBOOK REQUEST
-var newMessage = function (recipientId, msg, atts, cb) {
-	var opts = {
-		form: {
-			recipient: {
-				id: recipientId
-			},
-		}
-	}
+// var newMessage = function (recipientId, msg, atts, cb) {
+// 	var opts = {
+// 		form: {
+// 			recipient: {
+// 				id: recipientId
+// 			},
+// 		}
+// 	}
 
 	// https://developers.facebook.com/docs/messenger-platform/send-api-reference
 
 	// FOR IMAGES
-	// "message":{
-	//    "attachment":{
-	//      "type":"image",
-	//      "payload":{
-	//        "url":"https://petersapparel.com/img/shirt.png"
-	//      }
-	//    }
-	//  }
+  	// "message":{
+  	//    "attachment":{
+  	//      "type":"image",
+  	//      "payload":{
+  	//        "url":"https://petersapparel.com/img/shirt.png"
+  	//      }
+  	//    }
+  	//  }
 
 	// FOR TEMPLATES
-	// "message":{
-	//   "attachment":{
-	//     "type":"template",
-	//     "payload":{
-	//       "template_type":"button",
-	//       "text":"What do you want to do next?",
-	//       "buttons":[
-	//         {
-	//           "type":"web_url",
-	//           "url":"https://petersapparel.parseapp.com",
-	//           "title":"Show Website"
-	//         },
-	//         {
-	//           "type":"postback",
-	//           "title":"Start Chatting",
-	//           "payload":"USER_DEFINED_PAYLOAD"
-	//         }
-	//       ]
-	//     }
-	//   }
-	// }
+  	// "message":{
+  	//   "attachment":{
+  	//     "type":"template",
+  	//     "payload":{
+  	//       "template_type":"button",
+  	//       "text":"What do you want to do next?",
+  	//       "buttons":[
+  	//         {
+  	//           "type":"web_url",
+  	//           "url":"https://petersapparel.parseapp.com",
+  	//           "title":"Show Website"
+  	//         },
+  	//         {
+  	//           "type":"postback",
+  	//           "title":"Start Chatting",
+  	//           "payload":"USER_DEFINED_PAYLOAD"
+  	//         }
+  	//       ]
+  	//     }
+  	//   }
+  	// }
 
-	if (atts) {
-		var message = {
-			attachment: {
-				"type": "image",
-				"payload": {
-					"url": msg
-				}
-			}
-		}
-	} else {
-		var message = {
-			text: msg
-		}
-	}
-	opts.form.message = message
+// 	if (atts) {
+// 		var message = {
+// 			attachment: {
+// 				"type": "image",
+// 				"payload": {
+// 					"url": msg
+// 				}
+// 			}
+// 		}
+// 	} else {
+// 		var message = {
+// 			text: msg
+// 		}
+// 	}
+// 	opts.form.message = message
 
-	newRequest(opts, function (err, resp, data) {
-		if (cb) {
-			cb(err || data.error && data.error.message, data)
-		}
-	})
-}
+// 	return newRequest(opts, function (err, resp, data) {
+// 		if (cb) {
+// 			cb(err || data.error && data.error.message, data)
+// 		}
+// 	})
+// }
 
 // PARSE A FACEBOOK MESSAGE to get user, message body, or attachment
 // https://developers.facebook.com/docs/messenger-platform/webhook-reference
@@ -97,6 +97,42 @@ var getMessageEntry = function (body) {
 						body.entry[0].messaging.length > 0 &&
 						body.entry[0].messaging[0]
 	return val || null
+}
+
+var newMessage = function(recipientId, msg, hasAtts, cb) {
+
+  let message;
+  if (hasAtts) {
+    message = {
+      attachment: {
+        "type": "image",
+        "payload": {
+          "url": msg
+        }
+      }
+    }
+  } else {
+    message = { text: msg }
+  }
+
+  const body = JSON.stringify({
+    recipient: { recipientId },
+    message: { message },
+  });
+
+  const qs = 'access_token=' + encodeURIComponent(Config.FB_PAGE_TOKEN);
+  return fetch('https://graph.facebook.com/me/messages?' + qs, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body,
+  })
+  .then(rsp => rsp.json())
+  .then(json => {
+    if (json.error && json.error.message) {
+      throw new Error(json.error.message);
+    }
+    return json;
+  });
 }
 
 module.exports = {
