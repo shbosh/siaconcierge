@@ -104,7 +104,8 @@ var actions = {
       return new Promise((resolve, reject) => {
   			getWeather(context.loc) // loc is the property given in the wit.ai story
         .then(function (forecast) {
-          context.forecast = forecast.charAt(0).toUpperCase() + string.slice(1) || 'I\'m unsure of the weather'
+          context.forecast = forecast || 'I\'m unsure of the weather'
+          console.log('forecast ', forecast)
           resolve(context);
         })
         .catch(function (err) {
@@ -148,11 +149,11 @@ if (require.main === module) {
 // GET WEATHER FROM API
 var getWeather = function (location) {
 	return new Promise(function (resolve, reject) {
-		var url = 'http://api.openweathermap.org/data/2.5/weather?q=' + location + '&appid=' + Config.OPEN_WEATHER_API_KEY
+		var url = 'http://api.openweathermap.org/data/2.5/weather?q=' + location + '&appid=' + Config.OPEN_WEATHER_API_KEY + '&units=metric'
 		request(url, function (error, response, body) {
 		    if (!error && response.statusCode == 200) {
 		    	var jsonData = JSON.parse(body)
-		    	var forecast = jsonData.weather ? jsonData.weather[0].description : null;
+		    	var forecast = jsonData.weather ? (jsonData.weather[0].description + ', ' +jsonData.main.temp)  : null;
 		      resolve(forecast);
 		    }
 			})

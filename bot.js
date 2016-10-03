@@ -48,9 +48,11 @@ var read = function (sender, message) {
 			sessionId,                   // :sessionId:, the user's current session by id
 			message,                     // :text:, the user's message
 			sessions[sessionId].context  // :context:, the user's session state
-		).then(context => {
+		)
+    // End story for now - don't update context with callbacks
+    // .then(context => {
 				// Wit.ai ran all the actions in cycle, now it needs more messages
-				console.log('Waiting for further messages')
+				// console.log('Waiting for further messages')
 
 				// Based on the session state, you might want to reset the session
   				// Example:
@@ -59,11 +61,11 @@ var read = function (sender, message) {
   				// }
 
 				// Updating the user's current session state
-				sessions[sessionId].context = context
+				// sessions[sessionId].context = context
 
-		}).catch((err) => {
-      console.error('Oops! Got an error from Wit: ', err.stack || err);
-    })
+    // }).catch((err) => {
+    //   console.error('Oops! Got an error from Wit: ', err.stack || err);
+    // })
 
 }
 
