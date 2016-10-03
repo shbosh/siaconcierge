@@ -6,6 +6,25 @@ var request = require('request')
 var sessions = require('../bot').sessions
 const {Wit, log} = require('node-wit')
 
+const fbMessage = (id, text) => {
+  const body = JSON.stringify({
+    recipient: { id },
+    message: { text },
+  });
+  const qs = 'access_token=' + encodeURIComponent(FB_PAGE_TOKEN);
+  return fetch('https://graph.facebook.com/me/messages?' + qs, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body,
+  })
+  .then(rsp => rsp.json())
+  .then(json => {
+    if (json.error && json.error.message) {
+      throw new Error(json.error.message);
+    }
+    return json;
+  });
+};
 
 var firstEntityValue = function (entities, entity) {
 	var val = entities && entities[entity] &&
@@ -29,7 +48,7 @@ var actions = {
       // Yay, we found our recipient!
       // Let's forward our bot response to her.
       // We return a promise to let our bot know when we're done sending
-      return FB.newMessage(recipientId, text)
+      return fbMessage(recipientId, text)
       .then(() => null)
       .catch((err) => {
       	console.error(
