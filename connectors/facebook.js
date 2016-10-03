@@ -2,6 +2,7 @@
 
 var request = require('request')
 var Config = require('../config')
+const fetch = require('node-fetch');
 
 // SETUP A REQUEST TO FACEBOOK SERVER
 var newRequest = request.defaults({
@@ -116,8 +117,8 @@ var newMessage = function(recipientId, msg, hasAtts, cb) {
   }
 
   const body = JSON.stringify({
-    recipient: { recipientId },
-    message: { message },
+    recipient: { id: recipientId },
+    message: message,
   });
 
   const qs = 'access_token=' + encodeURIComponent(Config.FB_PAGE_TOKEN);
