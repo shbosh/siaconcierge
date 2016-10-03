@@ -34,16 +34,17 @@ var findOrCreateSession = function (fbid) {
 }
 
 var read = function (sender, message) {
-		// Let's find the user
+		// Let's find or create a session for the user
 		var sessionId = findOrCreateSession(sender)
+
 		// Let's forward the message to the Wit.ai bot engine - runs all actions (as in wit.ai story) until no more
     // See ./services/wit.js, params in runActions below are available in methods
 
 		wit.runActions(
 			sessionId,                   // :sessionId:, the user's current session by id
-			message,                     // :message:, the user's message
+			message,                     // :text:, the user's message
 			sessions[sessionId].context  // :context:, the user's session state
-		).then(context=> {
+		).then(context => {
 				// Wit.ai ran all the actions in cycle, now it needs more messages
 				console.log('Waiting for further messages')
 

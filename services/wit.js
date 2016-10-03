@@ -99,16 +99,19 @@ var actions = {
 	// list of functions Wit.ai can execute
 	['fetch-weather']({sessionId, context}) {
 		// Here we can place an API call to a weather service
+    console.log('context ', context);
 		if (context.loc) {
-			getWeather(context.loc) // loc is the property given in the wit.ai story
-				.then(function (forecast) {
+      return new Promise((resolve, reject) => {
+  			getWeather(context.loc) // loc is the property given in the wit.ai story
+        .then(function (forecast) {
           context.forecast = forecast || 'Maybe Sunny?'
-          console.log(forecast)
-          return Promise.resolve(context);
-				})
-				.catch(function (err) {
-					console.log(err)
-				})
+          resolve(context);
+        })
+        .catch(function (err) {
+         // console.log(err)
+         reject(err)
+        })
+      })
 		}
 
 	},
