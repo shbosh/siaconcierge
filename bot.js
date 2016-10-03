@@ -14,6 +14,7 @@ var findOrCreateSession = function (fbid) {
     if (sessions[k].fbid === fbid) {
       // YUP
       sessionId = k
+      console.log('user exists', fbid)
     }
   })
 
@@ -26,6 +27,7 @@ var findOrCreateSession = function (fbid) {
         _fbid_: fbid
       }
     }
+    console.log('user does not exists, created session', fbid)
   }
 
   return sessionId

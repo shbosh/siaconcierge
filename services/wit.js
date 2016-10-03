@@ -21,9 +21,13 @@ var firstEntityValue = function (entities, entity) {
 var actions = {
 
   // Compulsory method - https://github.com/wit-ai/node-wit#wit-class
-  // :param request: contains sessionId, context, message, entities properties
+  // :param request: contains sessionId, context, text, entities properties
   // :param response: contains text, quickreplies properties
-	send ({sessionId, context}, {text}) { // Destructure sessionId from request object, ie var sessionId = request.sessionId;
+	send ({sessionId, context, text}, {text: resText}) { // Destructure sessionId from request object, ie var sessionId = request.sessionId;
+
+    console.log('WIT WANTS TO TALK TO:', context._fbid_)
+    console.log('WIT HAS SOMETHING TO SAY:', resText)
+    console.log('WIT HAS A CONTEXT:', context)
 
     // Our bot has a reply! Let's retrieve the Facebook user whose session belongs to
     const recipientId = context._fbid_;
@@ -31,13 +35,13 @@ var actions = {
 
       // We return a js promise to let our bot know when we're done sending
 
-      if (checkURL(text)) {  // check if text contains image url
+      if (checkURL(resText)) {  // check if resText contains image url
 
-        return FB.newMessage(context._fbid_, text, true)
+        return FB.newMessage(recipientId, resText, true)
         .then(() => null)
         .catch(err => console.error( 'Error messaging', recipientId, ':', err.stack || err ));
       } else {
-        return FB.newMessage(context._fbid_, text)
+        return FB.newMessage(recipientId, resText)
         .then(() => null)
         .catch(err => console.error( 'Error messaging', recipientId, ':', err.stack || err ));
       }
