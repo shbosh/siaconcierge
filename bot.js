@@ -8,7 +8,7 @@ var sessions = {}
 
 var findOrCreateSession = function (fbid) {
   var sessionId
-
+  console.log('sessions: ', sessions)
   // DOES USER SESSION ALREADY EXIST?
   Object.keys(sessions).forEach(k => {
     if (sessions[k].fbid === fbid) {
