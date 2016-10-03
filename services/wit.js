@@ -88,7 +88,7 @@ var actions = {
 
 	// },
 
-	merge({sessionId, context, entities, message}) {
+	merge({sessionId, context, message, entities}) {
     console.log(`Session ${sessionId} received ${text}`);
     console.log(`The current context is ${JSON.stringify(context)}`);
     console.log(`Wit extracted ${JSON.stringify(entities)}`);

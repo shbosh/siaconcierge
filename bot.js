@@ -44,8 +44,8 @@ var read = function (sender, message, reply) {
 		wit.runActions(
 			sessionId, // the user's current session by id
 			message,  // the user's message
-			sessions[sessionId].context, // the user's session state
-			function (error, context) { // callback
+			sessions[sessionId].context // the user's session state
+		).then(function (context, error) { // callback
 			if (error) {
 				console.log('oops!', error)
 			} else {
