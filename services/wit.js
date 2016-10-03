@@ -40,6 +40,10 @@ var firstEntityValue = function (entities, entity) {
 
 
 var actions = {
+  // Compulsory method, destructure sessionId from request object, ie var sessionId = request.sessionId;
+  // :param request: contains sessionId, context, message, entities properties
+  // :param response: contains text, quickreplies properties
+
 	send ({sessionId}, {text}) {
     // Our bot has something to say!
     // Let's retrieve the Facebook user whose session belongs to
@@ -64,29 +68,6 @@ var actions = {
       return Promise.resolve()
     }
   },
-
-
-	// say (sessionId, context, message, cb) {
-	// 	// Bot testing mode, run cb() and return
-	// 	if (require.main === module) {
-	// 		cb()
-	// 		return
-	// 	}
-
-	// 	console.log('WIT WANTS TO TALK TO:', context._fbid_)
-	// 	console.log('WIT HAS SOMETHING TO SAY:', message)
-	// 	console.log('WIT HAS A CONTEXT:', context)
-
-	// 	if (checkURL(message)) {
-	// 		FB.newMessage(context._fbid_, message, true)
-	// 	} else {
-	// 		FB.newMessage(context._fbid_, message)
-	// 	}
-
-
-	// 	cb()
-
-	// },
 
 	merge({sessionId, context, message, entities}) {
     console.log(`Session ${sessionId} received ${text}`);
@@ -129,17 +110,17 @@ var actions = {
 	// list of functions Wit.ai can execute
 	['fetch-weather']({sessionId, context}) {
 		// Here we can place an API call to a weather service
-		// if (context.loc) {
-		// 	getWeather(context.loc)
-		// 		.then(function (forecast) {
-		// 			context.forecast = forecast || 'sunny'
-		// 		})
-		// 		.catch(function (err) {
-		// 			console.log(err)
-		// 		})
-		// }
+		if (context.loc) {
+			getWeather(context.loc)
+				.then(function (forecast) {
+					context.forecast = forecast || 'Maybe Sunny'
+				})
+				.catch(function (err) {
+					console.log(err)
+				})
+		}
 
-		context.forecast = 'Sunny'
+		// context.forecast = 'Sunny'
     return Promise.resolve(context);
 
 	},

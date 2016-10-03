@@ -38,20 +38,15 @@ var read = function (sender, message, reply) {
 		reply(sender, message)
 	} else {
 		// Let's find the user
-    console.log('sender', sender)
-    console.log('message', message)
-    console.log('reply', reply)
 		var sessionId = findOrCreateSession(sender)
 		// Let's forward the message to the Wit.ai bot engine
 		// This will run all actions until there are no more actions left to do
+    // Wit.ai sends replies to messenger, see wit.js
 		wit.runActions(
 			sessionId, // the user's current session by id
 			message,  // the user's message
 			sessions[sessionId].context // the user's session state
-		).then(function (context, error) { // callback
-			if (error) {
-				console.log('oops!', error)
-			} else {
+		).then(context=> { // callback
 				// Wit.ai ran all the actions
 				// Now it needs more messages
 				console.log('Waiting for further messages')
@@ -64,8 +59,10 @@ var read = function (sender, message, reply) {
 
 				// Updating the user's current session state
 				sessions[sessionId].context = context
-			}
-		})
+
+		}).catch((err) => {
+      console.error('Oops! Got an error from Wit: ', err.stack || err);
+    })
 	}
 }
 

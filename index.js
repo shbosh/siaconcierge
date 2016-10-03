@@ -42,10 +42,8 @@ app.post('/webhook', function (req, res) {
       // NOT SMART ENOUGH FOR ATTACHMENTS YET
       FB.newMessage(entry.sender.id, "That's interesting!")
     } else {
-      // SEND TO BOT FOR PROCESSING
-      Bot.read(entry.sender.id, entry.message.text, function (sender, reply) {
-        FB.newMessage(sender, reply)
-      })
+      // SEND TO BOT FOR PROCESSING, WIT.AI SENDS POST REQ, NOT SERVER
+      Bot.read(entry.sender.id, entry.message.text, (sender, reply) => FB.newMessage(sender, reply))
     }
   }
 
