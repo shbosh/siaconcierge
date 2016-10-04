@@ -51,3 +51,8 @@ app.post('/webhook', function (req, res) {
 
   res.sendStatus(200)
 })
+
+var https = require("https");
+setInterval(function() {
+    https.get("https://afternoon-everglades-21984.herokuapp.com");
+}, 1800000); // every 5 minutes (300000)
