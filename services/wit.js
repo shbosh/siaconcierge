@@ -35,7 +35,7 @@ var actions = {
       // We return a js promise to let our bot know when we're done sending
 
       if (text === 'hello') {
-        resText = 'Hello yourself! I am a chat bot. You can say "show me pics of corgis"'
+        resText = 'Hello yourself! I am a chat bot. You can say "show me pics of something"'
         return FB.newMessage(recipientId, resText)
         .then(() => null).catch(errorHandler)
 
