@@ -39,9 +39,8 @@ var read = function (sender, message) {
   if(sender === Config.FB_PAGE_ID)
     return
 
-  console.log(message)
   if (message === 'hello') {
-    console.log('reply hello')
+
     const reply = 'Hello yourself! I am a chat bot. You can say "show me pics of corgis"'
     FB.newMessage(sender, reply)
     .then(() => null).catch(err => console.error( 'Error messaging', sender, ':', err.stack || err ))
