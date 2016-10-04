@@ -1,6 +1,7 @@
 'use strict'
 
 var Config = require('./config')
+var FB = require('./connectors/facebook')
 var wit = require('./services/wit').getWit()
 
 // LETS SAVE USER SESSIONS
@@ -38,35 +39,44 @@ var read = function (sender, message) {
   if(sender === Config.FB_PAGE_ID)
     return
 
-	// Let's find or create a session for the user
-  var sessionId = findOrCreateSession(sender)
+  console.log(message)
+  if (message === 'hello') {
+    console.log('reply hello')
+    const reply = 'Hello yourself! I am a chat bot. You can say "show me pics of corgis"'
+    FB.newMessage(sender, reply)
+    .then(() => null).catch(err => console.error( 'Error messaging', sender, ':', err.stack || err ))
 
-		// Wit.ai bot engine reads - then runs all actions incl send (as in wit.ai story) until no more
-    // See ./services/wit.js, params in runActions below are available in methods
+  } else {
 
-		wit.runActions(
-			sessionId,                   // :sessionId:, the user's current session by id
-			message,                     // :text:, the user's message
-			sessions[sessionId].context  // :context:, the user's session state
-		)
-    // End story for now - don't update context with callbacks
-    // .then(context => {
-				// Wit.ai ran all the actions in cycle, now it needs more messages
-				// console.log('Waiting for further messages')
+  	// Let's find or create a session for the user
+    var sessionId = findOrCreateSession(sender)
 
-				// Based on the session state, you might want to reset the session
-  				// Example:
-  				// if (context['done']) {
-  				// 	delete sessions[sessionId]
-  				// }
+  		// Wit.ai bot engine reads - then runs all actions incl send (as in wit.ai story) until no more
+      // See ./services/wit.js, params in runActions below are available in methods
 
-				// Updating the user's current session state
-				// sessions[sessionId].context = context
+  		wit.runActions(
+  			sessionId,                   // :sessionId:, the user's current session by id
+  			message,                     // :text:, the user's message
+  			sessions[sessionId].context  // :context:, the user's session state
+  		)
+      // End story for now - don't update context with callbacks
+      // .then(context => {
+  				// Wit.ai ran all the actions in cycle, now it needs more messages
+  				// console.log('Waiting for further messages')
 
-    // }).catch((err) => {
-    //   console.error('Oops! Got an error from Wit: ', err.stack || err);
-    // })
+  				// Based on the session state, you might want to reset the session
+    				// Example:
+    				// if (context['done']) {
+    				// 	delete sessions[sessionId]
+    				// }
 
+  				// Updating the user's current session state
+  				// sessions[sessionId].context = context
+
+      // }).catch((err) => {
+      //   console.error('Oops! Got an error from Wit: ', err.stack || err);
+      // })
+  }
 }
 
 
