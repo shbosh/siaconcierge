@@ -2,6 +2,7 @@
 
 var Config = require('../config')
 var FB = require('../connectors/facebook')
+var Dashboard = require('../connectors/dashboard')
 var request = require('request')
 const {Wit, log} = require('node-wit') // Es6, 'const' is a var that cannot be reassigned, 'let' can be.
 
@@ -40,6 +41,8 @@ var actions = {
         .then(() => null).catch(errorHandler)
 
       } else {
+        const sentiment = Math.floor(Math.random()) == 1 ? 'positive' : 'negative';
+        Dashboard.newMessage(recipientId, resText, sentiment);
 
         return FB.newMessage(recipientId, resText)
         .then(() => null).catch(errorHandler)
