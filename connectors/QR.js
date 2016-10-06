@@ -37,7 +37,7 @@ var decode = function(url) {
       const flightNum = qrcodeData[3];
       const flightDate = qrcodeData[4].substring(0,3);
       const flightClass = getFlightClass(qrcodeData[4].substring(3,4));
-      const seatNum = qrcodeData[4].substring(4);
+      const seatNum = qrcodeData[4].substring(4,8);
       return {fullName, bookingRef, from, to, airline, airlineCode, flightNum, flightDate, flightClass, seatNum};
     }
 
