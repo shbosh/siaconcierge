@@ -6,6 +6,19 @@ const airlines = require('./airlines.json');
 const JulianDate = require('julian-date');
 const moment = require('moment');
 
+const getFlightClass = classLetter => {
+  switch(classLetter){
+    case 'Y':
+      return 'Economy';
+    case 'F':
+      return 'First';
+    case 'J':
+      return 'Business';
+    default :
+      return 'Unknown';
+  }
+}
+
 // SETUP A REQUEST TO DASHBOARD
 var decode = function(url) {
 
