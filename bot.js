@@ -50,9 +50,9 @@ var read = function (sender, message, passengerData, announceMsg) {
       }
     })
 
-  } else if (message === 'Hello') {
+  } else if (message.toLowerCase() === 'hello') {
 
-    const reply = 'Hello! Please take a picture of your Flight QR Code to continue.'
+    const reply = 'Hello, please take a picture of your Flight QR Code to continue.'
     FB.newMessage(sender, reply)
     .then(() => null).catch(err => console.error( 'Error messaging', sender, ':', err.stack || err ))
 
@@ -88,7 +88,7 @@ var read = function (sender, message, passengerData, announceMsg) {
       // })
   } else {
 
-    FB.newMessage(sender, "Please upload your QR Code to begin")
+    FB.newMessage(sender, "Hello, please take a picture of your Flight QR Code to continue.")
     .then(() => null).catch(err => console.error( 'Error messaging', sender, ':', err.stack || err ))
 
   }
