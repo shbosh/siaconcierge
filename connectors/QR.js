@@ -22,7 +22,7 @@ var decode = function(url) {
       const airlineCode = qrcodeData[2].substring(6);
       const airline = airlines.find(airline=>airline.iata === airlineCode).name;
       const flightNum = qrcodeData[3];
-      const flightDate = (new JulianDate().julianDays(qrcodeData[4].substring(0,3))).getDate();
+      const flightDate = qrcodeData[4].substring(0,3);
       const flightClass = qrcodeData[4].substring(3,4);
       const seatNum = qrcodeData[4].substring(4);
       return {fullName, bookingRef, from, to, airline, airlineCode, flightNum, flightDate, flightClass, seatNum};
