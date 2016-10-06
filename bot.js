@@ -24,6 +24,7 @@ var findOrCreateSession = function (fbid, passengerData) {
     sessionId = new Date().toISOString()
     sessions[sessionId] = {
       fbid: fbid,
+      flightId: passengerData.flightNum + passengerData.flightDate
       context: {
         _fbid_: fbid,
         passengerData
@@ -35,12 +36,21 @@ var findOrCreateSession = function (fbid, passengerData) {
   return sessionId
 }
 
-var read = function (sender, message, passengerData) {
+var read = function (sender, message, passengerData, announceMsg) {
 
   if(sender === Config.FB_PAGE_ID)
     return
 
-  if (message === 'hello') {
+  if(announceMsg) {
+    // Send message to all users with same flight id
+    Object.keys(sessions).forEach(k => {
+      const sessionObj = sessions[k];
+      if (sessionObj.flightId === announceMsg.flightId) {
+        FB.newMessage(sessionObj.fbid, announceMsg.msg)
+      }
+    })
+
+  } else if (message === 'hello') {
 
     const reply = 'Hello yourself! I am a chat bot. You can say "show me pics of corgis"'
     FB.newMessage(sender, reply)

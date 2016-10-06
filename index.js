@@ -44,7 +44,7 @@ app.post('/webhook', function (req, res) {
       const imageUrl = entry.message.attachments[0].payload.url;
 
       QR.decode(imageUrl).then(psgr => {
-        const reply = `Hello ${psgr.fullName}, taking ${psgr.airline} from ${psgr.from} to ${psgr.to}, flight ${psgr.airlineCode + ' ' + psgr.flightNum}, booking ref: ${psgr.bookingRef}? `
+        const reply = `Hello ${psgr.fullName}, are you taking ${psgr.airline} (${psgr.airlineCode + ' ' + psgr.flightNum}, Booking Ref: ${psgr.bookingRef}) from ${psgr.from} to ${psgr.to}? `
         FB.newMessage(entry.sender.id, reply)
         Bot.read(entry.sender.id, entry.message.text, psgr)
       })
@@ -57,6 +57,12 @@ app.post('/webhook', function (req, res) {
   }
 
   res.sendStatus(200)
+})
+
+app.post('/api/announce', (req, res) => {
+  console.log('announceMsg', req.body);
+  // eg {flightId: 1, msg: 'Boarding now'}
+  Bot.read(null, null, null, req.body);
 })
 
 var https = require("https");
