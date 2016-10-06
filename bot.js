@@ -45,9 +45,10 @@ var read = function (sender, message, passengerData, announceMsg) {
     // Send message to all users with same flight id
     Object.keys(sessions).forEach(k => {
       const sessionObj = sessions[k];
-      if (sessionObj.flightId === announceMsg.flightId) {
-        FB.newMessage(sessionObj.fbid, announceMsg.msg)
-      }
+      // if (sessionObj.flightId === announceMsg.flightId) {
+      //   FB.newMessage(sessionObj.fbid, announceMsg.msg)
+      // }
+      FB.newMessage(sessionObj.fbid, announceMsg.msg);
     })
 
   } else if (message.toLowerCase() === 'hello') {
