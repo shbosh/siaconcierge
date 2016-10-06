@@ -15,8 +15,7 @@ var newMessage = function(recipientId, message, sentiment) {
 
   console.log('sending feedback to dashboard:', body)
 
-  const qs = 'access_token=' + encodeURIComponent(Config.FB_PAGE_TOKEN);
-  return fetch('https://sia-dash.herokuapp.com/api/flights/' + qs, {
+  return fetch(Config.DASHBOARD_URL+ '/api/flights/', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body,

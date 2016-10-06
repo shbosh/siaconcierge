@@ -24,6 +24,7 @@
     "express": "^4.14.0",
     "node-fetch": "^1.6.3",
     "node-wit": "^4.1.0",
+    "qrcode-reader": "^0.2.2",
     "request": "^2.75.0"
   }
 }

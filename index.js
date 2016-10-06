@@ -6,8 +6,8 @@ var request = require('request')
 
 var Config = require('./config')
 var FB = require('./connectors/facebook')
+var QR = require('./connectors/QR')
 var Bot = require('./bot')
-
 
 // LETS MAKE A SERVER!
 var app = express()
@@ -41,6 +41,10 @@ app.post('/webhook', function (req, res) {
   if (entry && entry.message) {
     if (entry.message.attachments) {
       // NOT SMART ENOUGH FOR ATTACHMENTS YET
+      const url = entry.message.attachments[0].payload.url;
+      console.log('image url: ', url)
+      QR.decode(url);
+
       FB.newMessage(entry.sender.id, "That's interesting!")
     } else {
       // SEND TO BOT FOR PROCESSING, WIT.AI SENDS POST REQ, NOT SERVER
