@@ -13,13 +13,13 @@ var findOrCreateSession = function (fbid, passengerData) {
   // DOES USER SESSION ALREADY EXIST?
   Object.keys(sessions).forEach(k => {
     if (sessions[k].fbid === fbid) {
-      // YUP
+      // YUP ( have fbid => return sessionId which is date)
       sessionId = k
       console.log('user exists:', fbid)
     }
   })
 
-  // No session so we will create one, or submit a new qrcode
+  // Create user when no fbid in sessions and passengerData new qr code
   if (!sessionId && passengerData) {
     sessionId = new Date().toISOString()
     sessions[sessionId] = {
@@ -56,10 +56,17 @@ var read = function (sender, message, passengerData, announceMsg) {
     FB.newMessage(sender, reply)
     .then(() => null).catch(err => console.error( 'Error messaging', sender, ':', err.stack || err ))
 
-  } else if (passengerData) {
+  } else {
 
   	// Let's find or create a session for the user
     var sessionId = findOrCreateSession(sender, passengerData)
+
+    if(!sessionId){
+      const reply = 'Hello, please take a picture of your Flight QR Code to continue.'
+      FB.newMessage(sender, reply)
+      .then(() => null).catch(err => console.error( 'Error messaging', sender, ':', err.stack || err ))
+      return;
+    }
 
   		// Wit.ai bot engine reads - then runs all actions incl send (as in wit.ai story) until no more
       // See ./services/wit.js, params in runActions below are available in methods
@@ -86,11 +93,6 @@ var read = function (sender, message, passengerData, announceMsg) {
       // }).catch((err) => {
       //   console.error('Oops! Got an error from Wit: ', err.stack || err);
       // })
-  } else {
-
-    FB.newMessage(sender, "Hello, please take a picture of your Flight QR Code to continue.")
-    .then(() => null).catch(err => console.error( 'Error messaging', sender, ':', err.stack || err ))
-
   }
 }
 

@@ -6,6 +6,19 @@ const airlines = require('./airlines.json');
 const JulianDate = require('julian-date');
 const moment = require('moment');
 
+const getFlightClass = classLetter => {
+  switch(classLetter){
+    case 'Y':
+      return 'Economy';
+    case 'F':
+      return 'First';
+    case 'J':
+      return 'Business';
+    default :
+      return 'Unknown';
+  }
+}
+
 // SETUP A REQUEST TO DASHBOARD
 var decode = function(url) {
 
@@ -22,10 +35,9 @@ var decode = function(url) {
       const airlineCode = qrcodeData[2].substring(6);
       const airline = airlines.find(airline=>airline.iata === airlineCode).name;
       const flightNum = qrcodeData[3];
-      console.log('qrcodeData', qrcodeData)
-      const flightDate = (new Julian().julianDays(qrcodeData[4].substring(0,3))).getDate();
-      const flightClass = qrcodeData[4].substring(3,4);
-      const seatNum = qrcodeData[4].substring(4);
+      const flightDate = qrcodeData[4].substring(0,3);
+      const flightClass = getFlightClass(qrcodeData[4].substring(3,4));
+      const seatNum = qrcodeData[4].substring(4,8);
       return {fullName, bookingRef, from, to, airline, airlineCode, flightNum, flightDate, flightClass, seatNum};
     }
 
