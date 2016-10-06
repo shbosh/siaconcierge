@@ -3,6 +3,8 @@
 const fetch = require('node-fetch');
 const airports = require('airport-codes');
 const airlines = require('./airlines.json');
+const JulianDate = require('julian-date');
+const moment = require('moment');
 
 // SETUP A REQUEST TO DASHBOARD
 var decode = function(url) {
@@ -10,7 +12,7 @@ var decode = function(url) {
   return fetch("http://api.qrserver.com/v1/read-qr-code/?fileurl="+ encodeURIComponent(url))
   .then(rsp => rsp.json())
   .then(msg => {
-    const qrcodeData = ((msg[0].symbol[0].data).match(/\S+/g) || []).slice(0,4);
+    const qrcodeData = ((msg[0].symbol[0].data).match(/\S+/g) || []).slice(0,5);
     if(qrcodeData.length > 0){
       const name = qrcodeData[0].split('/');
       const fullName = name[1] + ' ' + name[0];
@@ -20,7 +22,10 @@ var decode = function(url) {
       const airlineCode = qrcodeData[2].substring(6);
       const airline = airlines.find(airline=>airline.iata === airlineCode).name;
       const flightNum = qrcodeData[3];
-      return {fullName, bookingRef, from, to, airline, airlineCode, flightNum};
+      const flightDate = (new Julian().julianDays(qrcodeData[4].substring(0,3))).getDate();
+      const flightClass = qrcodeData[4].substring(3,4);
+      const seatNum = qrcodeData[4].substring(4);
+      return {fullName, bookingRef, from, to, airline, airlineCode, flightNum, flightDate, flightClass, seatNum};
     }
 
   })
