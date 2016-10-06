@@ -86,9 +86,9 @@ var actions = {
 		}
 
 		// Retrieve Requests
-		var request = firstEntityValue(entities, 'message_body')
+		var request = firstEntityValue(entities, 'request')
 		if (request) {
-			context.rawequest = request
+			context.rawrequest = request
 		}
 
 		// Retrieve the category
