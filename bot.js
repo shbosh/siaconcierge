@@ -8,7 +8,8 @@ var wit = require('./services/wit').getWit()
 var sessions = {}
 
 var findOrCreateSession = function (fbid, passengerData) {
-  var sessionId
+
+ var sessionId
   // console.log('sessions: ', sessions)
   // DOES USER SESSION ALREADY EXIST?
   Object.keys(sessions).forEach(k => {
@@ -18,7 +19,7 @@ var findOrCreateSession = function (fbid, passengerData) {
       console.log('user exists:', fbid)
     }
   })
-console.log(sessionId)
+
   // Create user when no fbid in sessions and passengerData new qr code
   if (!sessionId && passengerData) {
     sessionId = new Date().toISOString()
@@ -30,6 +31,7 @@ console.log(sessionId)
         passengerData
       }
     }
+    console.log(sessions)
     console.log('user does not exists, created session for ', fbid)
   }
 
@@ -51,7 +53,7 @@ var read = function (sender, message, passengerData, announceMsg) {
       FB.newMessage(sessionObj.fbid, announceMsg.msg);
     })
 
-  } else if (message.toLowerCase() === 'hello') {
+  } else if (message === 'hello') {
 
     const reply = 'Hello, please take a picture of your Flight QR Code to continue.'
     FB.newMessage(sender, reply)
@@ -61,7 +63,6 @@ var read = function (sender, message, passengerData, announceMsg) {
 
   	// Let's find or create a session for the user
     var sessionId = findOrCreateSession(sender, passengerData)
-console.log(sessionId)
     if(!sessionId){
       const reply = 'Hello, please take a picture of your Flight QR Code to continue.'
       FB.newMessage(sender, reply)
