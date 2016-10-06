@@ -24,7 +24,7 @@ var findOrCreateSession = function (fbid, passengerData) {
     sessionId = new Date().toISOString()
     sessions[sessionId] = {
       fbid: fbid,
-      flightId: passengerData.flightNum + passengerData.flightDate
+      flightId: passengerData.flightNum + passengerData.flightDate,
       context: {
         _fbid_: fbid,
         passengerData
