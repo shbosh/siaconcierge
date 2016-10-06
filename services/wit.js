@@ -148,6 +148,7 @@ var actions = {
 	},
 	['push-request']({sessionId, context}) {
 		context.request = "rawwww"
+		console.log(context);
     return Promise.resolve(context);
 	},
 
