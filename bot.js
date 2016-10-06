@@ -53,7 +53,7 @@ var read = function (sender, message, passengerData, announceMsg) {
       if (announceMsg.posttype == "flightdelay") {
         FB.newMessage(sessionObj.fbid, "your flight is delayed");
       } else if (announceMsg.posttype == "startflight") {
-        FB.newMessage(sessionObj.fbid, "Welcome to Singapore Airlines. To call our flight attendants: please type in this format: Req: <Your Request>");;
+        FB.newMessage(sessionObj.fbid, "Welcome to Singapore Airlines. To get assistance from our flight attendants, please type in this format => Req: <Your Request>");;
       } else if (announceMsg.posttype == "endflight") {
         FB.newMessage(sessionObj.fbid, "We have reached your destination.");
       }
