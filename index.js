@@ -43,11 +43,11 @@ app.post('/webhook', function (req, res) {
       // NOT SMART ENOUGH FOR ATTACHMENTS YET
       const imageUrl = entry.message.attachments[0].payload.url;
 
-      QR.decode(imageUrl).then(passenger => {
-        console.log(passenger)
+      QR.decode(imageUrl).then(psgr => {
+        const reply = `Hello ${psgr.fullName}, taking ${psgr.airline} from ${psgr.from} to ${psgr.to}, flight ${psgr.airlineCode + ' ' + psgr.flightNum}, booking ref: ${psgr.bookingRef}? `
+        FB.newMessage(entry.sender.id, reply)
+        Bot.read(entry.sender.id, entry.message.text, psgr)
       })
-
-      FB.newMessage(entry.sender.id, "That's interesting!")
 
     } else {
       // SEND TO BOT FOR PROCESSING, WIT.AI SENDS POST REQ, NOT SERVER

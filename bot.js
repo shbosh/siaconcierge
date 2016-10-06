@@ -7,9 +7,9 @@ var wit = require('./services/wit').getWit()
 // LETS SAVE USER SESSIONS
 var sessions = {}
 
-var findOrCreateSession = function (fbid) {
+var findOrCreateSession = function (fbid, passengerData) {
   var sessionId
-  console.log('sessions: ', sessions)
+  // console.log('sessions: ', sessions)
   // DOES USER SESSION ALREADY EXIST?
   Object.keys(sessions).forEach(k => {
     if (sessions[k].fbid === fbid) {
@@ -19,13 +19,14 @@ var findOrCreateSession = function (fbid) {
     }
   })
 
-  // No session so we will create one
-  if (!sessionId) {
+  // No session so we will create one, or submit a new qrcode
+  if (!sessionId || passengerData) {
     sessionId = new Date().toISOString()
     sessions[sessionId] = {
       fbid: fbid,
       context: {
-        _fbid_: fbid
+        _fbid_: fbid,
+        passengerData
       }
     }
     console.log('user does not exists, created session for ', fbid)
@@ -34,7 +35,7 @@ var findOrCreateSession = function (fbid) {
   return sessionId
 }
 
-var read = function (sender, message) {
+var read = function (sender, message, passengerData) {
 
   if(sender === Config.FB_PAGE_ID)
     return
@@ -48,7 +49,7 @@ var read = function (sender, message) {
   } else {
 
   	// Let's find or create a session for the user
-    var sessionId = findOrCreateSession(sender)
+    var sessionId = findOrCreateSession(sender, passengerData)
 
   		// Wit.ai bot engine reads - then runs all actions incl send (as in wit.ai story) until no more
       // See ./services/wit.js, params in runActions below are available in methods

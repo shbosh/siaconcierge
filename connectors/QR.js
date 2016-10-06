@@ -2,6 +2,7 @@
 
 const fetch = require('node-fetch');
 const airports = require('airport-codes');
+const airlines = require('./airlines.json');
 
 // SETUP A REQUEST TO DASHBOARD
 var decode = function(url) {
@@ -16,9 +17,10 @@ var decode = function(url) {
       const bookingRef = qrcodeData[1].substring(1);
       const from = airports.findWhere({iata: qrcodeData[2].substring(0,3)}).get('city');
       const to = airports.findWhere({iata: qrcodeData[2].substring(3,6)}).get('city');
-      const airline = qrcodeData[2].substring(6);
+      const airlineCode = qrcodeData[2].substring(6);
+      const airline = airlines.find(airline=>airline.iata === airlineCode).name;
       const flightNum = qrcodeData[3];
-      return {name, fullName, bookingRef, from, to, airline, flightNum};
+      return {fullName, bookingRef, from, to, airline, airlineCode, flightNum};
     }
 
   })
