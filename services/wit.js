@@ -73,6 +73,13 @@ var actions = {
 		// Reset the cutepics story
 		delete context.pics
 
+		//Retrieve time
+		var time = firstEntityValue(entities, 'intent')
+		if (time) {
+			context.time = time
+		}
+
+
 		// Retrieve the category
 		var category = firstEntityValue(entities, 'category')
 		if (category) {
@@ -121,6 +128,16 @@ var actions = {
     return Promise.resolve(context);
 
 	},
+
+	['fetch-departureTime']({sessionId, context}) {
+		var departTime = "9.40 pm"
+		context.timeToDeparture = departTime
+    return Promise.resolve(context);
+
+	},
+
+
+
 }
 
 // SETUP THE WIT.AI SERVICE
