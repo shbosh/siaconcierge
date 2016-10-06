@@ -50,7 +50,13 @@ var read = function (sender, message, passengerData, announceMsg) {
       // if (sessionObj.flightId === announceMsg.flightId) {
       //   FB.newMessage(sessionObj.fbid, announceMsg.msg)
       // }
-      FB.newMessage(sessionObj.fbid, announceMsg.msg);
+      if (announceMsg.posttype == "flightdelay") {
+        FB.newMessage(sessionObj.fbid, "your flight is delayed");
+      } else if (announceMsg.posttype == "startflight") {
+        FB.newMessage(sessionObj.fbid, "Welcome to Singapore Airlines. To call our flight attendants: please type in this format: Req: <Your Request>");;
+      } else if (announceMsg.posttype == "endflight") {
+        FB.newMessage(sessionObj.fbid, "We have reached your destination.");
+      }
     })
 
   } else if (message === 'hello') {
