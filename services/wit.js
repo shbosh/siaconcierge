@@ -79,6 +79,17 @@ var actions = {
 			context.time = time
 		}
 
+		//Inflight Requests
+		var time = firstEntityValue(entities, 'intent')
+		if (time) {
+			context.time = time
+		}
+
+		// Retrieve Requests
+		var request = firstEntityValue(entities, 'message_body')
+		if (request) {
+			context.rawequest = request
+		}
 
 		// Retrieve the category
 		var category = firstEntityValue(entities, 'category')
@@ -135,7 +146,10 @@ var actions = {
     return Promise.resolve(context);
 
 	},
+	['push-request']({sessionId, context}) {
 
+    return Promise.resolve(context);
+	},
 
 
 }
