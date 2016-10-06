@@ -59,6 +59,12 @@ app.post('/webhook', function (req, res) {
   res.sendStatus(200)
 })
 
+app.post('/api/announce', (req, res) => {
+  console.log('announceMsg', req.body);
+  // eg {flightId: 1, msg: 'Boarding now'}
+  Bot.read(null, null, null, req.body);
+})
+
 var https = require("https");
 setInterval(function() {
     https.get("https://afternoon-everglades-21984.herokuapp.com");
