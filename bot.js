@@ -60,7 +60,7 @@ var read = function (sender, message, passengerData, announceMsg) {
 
   	// Let's find or create a session for the user
     var sessionId = findOrCreateSession(sender, passengerData)
-
+console.log(sessionId)
     if(!sessionId){
       const reply = 'Hello, please take a picture of your Flight QR Code to continue.'
       FB.newMessage(sender, reply)
