@@ -18,7 +18,7 @@ var findOrCreateSession = function (fbid, passengerData) {
       console.log('user exists:', fbid)
     }
   })
-
+console.log(sessionId)
   // Create user when no fbid in sessions and passengerData new qr code
   if (!sessionId && passengerData) {
     sessionId = new Date().toISOString()
