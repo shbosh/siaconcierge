@@ -51,11 +51,11 @@ var read = function (sender, message, passengerData, announceMsg) {
       //   FB.newMessage(sessionObj.fbid, announceMsg.msg)
       // }
       if (announceMsg.posttype == "flightdelay") {
-        FB.newMessage(sessionObj.fbid, "your flight is delayed");
+        FB.newMessage(sessionObj.fbid, "Dear passenger, your flight has been delayed to" + announceMsg.val + ". Sorry for the inconvenience caused.");
       } else if (announceMsg.posttype == "startflight") {
         FB.newMessage(sessionObj.fbid, "Welcome to Singapore Airlines. To get assistance from our flight attendants, please type in this format => Req: <Your Request>");;
       } else if (announceMsg.posttype == "endflight") {
-        FB.newMessage(sessionObj.fbid, "We have reached your destination.");
+        FB.newMessage(sessionObj.fbid, "We have reached your destination. We will appreciate it alot if you can leave us a feedback. Have a great trip!");
       }
     })
 
