@@ -147,7 +147,7 @@ var actions = {
 
 	},
 	['push-request']({sessionId, context}) {
-
+		context.request = "rawwww"
     return Promise.resolve(context);
 	},
 
