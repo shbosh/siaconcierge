@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/shbosh/siaconcierge#readme",
   "dependencies": {
+    "airport-codes": "^1.0.2",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "node-fetch": "^1.6.3",

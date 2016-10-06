@@ -41,11 +41,14 @@ app.post('/webhook', function (req, res) {
   if (entry && entry.message) {
     if (entry.message.attachments) {
       // NOT SMART ENOUGH FOR ATTACHMENTS YET
-      const url = entry.message.attachments[0].payload.url;
-      console.log('image url: ', url)
-      QR.decode(url);
+      const imageUrl = entry.message.attachments[0].payload.url;
+
+      QR.decode(imageUrl).then(passenger => {
+        console.log(passenger)
+      })
 
       FB.newMessage(entry.sender.id, "That's interesting!")
+
     } else {
       // SEND TO BOT FOR PROCESSING, WIT.AI SENDS POST REQ, NOT SERVER
       // see ./bot.js
