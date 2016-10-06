@@ -65,6 +65,9 @@ app.post('/api/announce', (req, res) => {
   console.log('announceMsg', req.body);
   // eg {flightId: 1, msg: 'Boarding now'}
   Bot.read(null, null, null, req.body);
+  response.set('Content-Type', 'text/plain');
+  response.send("Message received.");
+  response.end();
 })
 
 var https = require("https");
