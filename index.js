@@ -62,9 +62,9 @@ app.post('/webhook', function (req, res) {
 })
 app.use(bodyParser.urlencoded({extended : false}));
 app.post('/api/announce', (req, res) => {
-  console.log('announceMsg', req);
+  console.log('announceMsg', req.query);
   // eg {flightId: 1, msg: 'Boarding now'}
-  Bot.read(null, null, null, req);
+  Bot.read(null, null, null, req.query);
   res.send("Message received.");
   res.end();
 })
