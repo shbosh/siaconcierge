@@ -20,11 +20,11 @@ var findOrCreateSession = function (fbid, passengerData) {
   })
 
   // No session so we will create one, or submit a new qrcode
-  if (!sessionId || passengerData) {
+  if (!sessionId && passengerData) {
     sessionId = new Date().toISOString()
     sessions[sessionId] = {
       fbid: fbid,
-      flightId: passengerData.flightNum + passengerData.flightDate
+      flightId: passengerData.flightNum + passengerData.flightDate,
       context: {
         _fbid_: fbid,
         passengerData
@@ -50,13 +50,13 @@ var read = function (sender, message, passengerData, announceMsg) {
       }
     })
 
-  } else if (message === 'hello') {
+  } else if (message === 'Hello') {
 
-    const reply = 'Hello yourself! I am a chat bot. You can say "show me pics of corgis"'
+    const reply = 'Hello! Please take a picture of your Flight QR Code to continue.'
     FB.newMessage(sender, reply)
     .then(() => null).catch(err => console.error( 'Error messaging', sender, ':', err.stack || err ))
 
-  } else {
+  } else if (passengerData) {
 
   	// Let's find or create a session for the user
     var sessionId = findOrCreateSession(sender, passengerData)
@@ -86,6 +86,11 @@ var read = function (sender, message, passengerData, announceMsg) {
       // }).catch((err) => {
       //   console.error('Oops! Got an error from Wit: ', err.stack || err);
       // })
+  } else {
+
+    FB.newMessage(sender, "Please upload your QR Code to begin")
+    .then(() => null).catch(err => console.error( 'Error messaging', sender, ':', err.stack || err ))
+
   }
 }
 
