@@ -129,6 +129,13 @@ var actions = {
 
 	},
 
+	['fetch-luggagelimit']({sessionId, context}) {
+		var lugg = "50kg"
+		context.luggagelim = lugg
+    return Promise.resolve(context);
+
+	},
+
 
 
 }
