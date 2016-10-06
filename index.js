@@ -19,7 +19,7 @@ app.listen(app.get('port'), function () {
 })
 // PARSE THE BODY
 app.use(bodyParser.json())
-app.use(bodyparser.urlencoded())
+app.use(bodyParser.urlencoded())
 
 
 // index page
