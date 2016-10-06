@@ -19,7 +19,6 @@ app.listen(app.get('port'), function () {
 })
 // PARSE THE BODY
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded())
 
 
 // index page
@@ -61,7 +60,7 @@ app.post('/webhook', function (req, res) {
 
   res.sendStatus(200)
 })
-
+app.use(bodyParser.urlencoded({extended : false}));
 app.post('/api/announce', (req, res) => {
   console.log('announceMsg', req.body);
   // eg {flightId: 1, msg: 'Boarding now'}
