@@ -48,7 +48,12 @@ app.post('/webhook', function (req, res) {
         Bot.read(entry.sender.id, entry.message.text, psgr)
 
         const reply = `Hello ${psgr.fullName}, are you taking ${psgr.airline} (${psgr.airlineCode + ' ' + psgr.flightNum}, Booking Ref: ${psgr.bookingRef}) from ${psgr.from} to ${psgr.to}? `
-        FB.newMessage(entry.sender.id, reply)
+        const quickreplies =[
+          {"content_type":"text","title":"Yes.","payload":"Yes, that's me"},
+          {"content_type":"text","title":"No.","payload":"No."}
+        ]
+
+        FB.newMessage(entry.sender.id, reply, null, quickreplies)
       })
 
     } else {

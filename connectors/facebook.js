@@ -31,7 +31,7 @@ var newMessage = function(recipientId, msg, hasAtts, hasQuick) {
       }
     }
   } else if (hasQuick) {
-    message = { text: msg, quickreplies: hasQuick }
+    message = { text: msg, quick_replies: hasQuick }
   } else {
     message = { text: msg }
   }
