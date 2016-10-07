@@ -46,12 +46,12 @@ app.post('/webhook', function (req, res) {
       const imageUrl = entry.message.attachments[0].payload.url;
 
       QR.decode(imageUrl).then(psgr => {
-        Bot.read(entry.sender.id, "__VERIFIED__", psgr)
+        Bot.read(entry.sender.id, null, psgr)
 
         const reply = `Hello ${psgr.fullName}, are you taking ${psgr.airline} (${psgr.airlineCode + ' ' + psgr.flightNum}, Booking Ref: ${psgr.bookingRef}) from ${psgr.from} to ${psgr.to}? `
         const quickreplies =[
-          {"content_type":"text","title":"Yes.","payload":"Yes, that's me"},
-          {"content_type":"text","title":"No.","payload":"No."}
+          {"content_type":"text","title":"Yes, that is me","payload":"Yes, that's me"},
+          {"content_type":"text","title":"No, that is not me.","payload":"No."}
         ]
 
         FB.newMessage(entry.sender.id, reply, null, quickreplies)
