@@ -24,7 +24,7 @@ var actions = {
   // Compulsory method - https://github.com/wit-ai/node-wit#wit-class
   // :param request: contains sessionId, context, text, entities properties
   // :param response: contains text, quickreplies properties
-	send ({sessionId, context, text}, {text: resText}) { // Destructure sessionId from request object, ie var sessionId = request.sessionId;
+	send ({sessionId, context, text}, {text: resText, quickreplies} ) { // Destructure sessionId from request object, ie var sessionId = request.sessionId;
     console.log('WIT WANTS TO TALK TO:', context._fbid_)
     console.log('WIT HAS SOMETHING TO SAY:', resText)
     console.log('WIT HAS A CONTEXT:', context)
@@ -56,6 +56,11 @@ var actions = {
           FB.newMessage(recipientId, restrictedPic, true)
           .then(() => null).catch(errorHandler)
         }
+
+        if(quickreplies)
+          return FB.newMessage(recipientId, resText, null, quickreplies.map(reply => {
+            return {"content_type":"text", "title": reply, "payload": reply}
+          })).then(() => null).catch(errorHandler)
 
         return FB.newMessage(recipientId, resText)
         .then(() => null).catch(errorHandler)
