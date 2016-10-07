@@ -50,6 +50,50 @@ var actions = {
         if(faq || rawrequest || feedback || feedback)
           Dashboard.newMessage(recipientId, resText, context);
 
+        // send template picture
+        if(context.request) {
+
+          const message = {
+            "attachment":{
+              "type":"template",
+              "payload":{
+                "template_type":"generic",
+                "elements":[
+                {
+                  "title":"Welcome to Peter\'s Hats",
+                  "item_url":"https://petersfancybrownhats.com",
+                  "image_url":"https://petersfancybrownhats.com/company_image.png",
+                  "subtitle":"We\'ve got the right hat for everyone.",
+                  "buttons":[
+                    {
+                      "type":"web_url",
+                      "url":"https://petersfancybrownhats.com",
+                      "title":"View Website"
+                    },
+                  ]
+                },
+                {
+                  "title":"Welcome to Peter\'s Hats",
+                  "item_url":"https://petersfancybrownhats.com",
+                  "image_url":"https://petersapparel.com/img/shirt.png",
+                  "subtitle":"We\'ve got the right shirts for everyone.",
+                  "buttons":[
+                    {
+                      "type":"web_url",
+                      "url":"https://petersfancybrownhats.com",
+                      "title":"View Website"
+                    },
+                  ]
+                },
+
+                ]
+              }
+            }
+          }
+          FB.newMessage(recipientId, null, null, null, message)
+          .then(() => null).catch(errorHandler)
+        }
+
         // send restricted items picture
         if(resText.substring(0,33) === "Please check the prohibited items") {
           const restrictedPic = "https://www.singaporeair.com/en_UK/us/travel-info/baggage/baggage-restrictions/saar5/images/travel-info/baggages/prohibited-items.jpg";
@@ -57,10 +101,11 @@ var actions = {
           .then(() => null).catch(errorHandler)
         }
 
-        if(quickreplies)
+        if(quickreplies){
           return FB.newMessage(recipientId, resText, null, quickreplies.map(reply => {
             return {"content_type":"text", "title": reply, "payload": reply}
           })).then(() => null).catch(errorHandler)
+        }
 
         return FB.newMessage(recipientId, resText)
         .then(() => null).catch(errorHandler)
@@ -194,8 +239,8 @@ var actions = {
     return Promise.resolve(context);
 
 	},
-	['push-request']({sessionId, context}) {
-		context.request = "rawwww"
+	['push-request']({sessionId, context, text}) {
+		context.request = text;
 		console.log(context);
     return Promise.resolve(context);
 	},

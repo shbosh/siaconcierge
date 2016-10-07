@@ -20,7 +20,7 @@ var getMessageEntry = function (body) {
 }
 
 // SETUP A REQUEST TO FACEBOOK SERVER
-var newMessage = function(recipientId, msg, hasAtts, hasQuick) {
+var newMessage = function(recipientId, msg, hasAtts, hasQuick, hasTemplate) {
 
   let message;
   if (hasAtts) {
@@ -32,6 +32,8 @@ var newMessage = function(recipientId, msg, hasAtts, hasQuick) {
     }
   } else if (hasQuick) {
     message = { text: msg, quick_replies: hasQuick }
+  } else if (hasTemplate) {
+    message = hasTemplate
   } else {
     message = { text: msg }
   }
