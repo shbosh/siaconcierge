@@ -47,8 +47,10 @@ var actions = {
         console.log('rawrequest', rawrequest)
         console.log('feedback', feedback)
         console.log('rating', rating)
-        if(faq || rawrequest || feedback || feedback)
-          Dashboard.newMessage(recipientId, resText, context);
+        const key = faq ? 'faq' : rawrequest ? 'rawrequest' : feedback ? 'feedback' : rating ? 'rating' : null;
+        console.log('key', key);
+        if(key)
+          Dashboard.newMessage(recipientId, resText, context, key);
 
         // send template picture
         if(context.request) {

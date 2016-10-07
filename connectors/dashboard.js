@@ -11,10 +11,8 @@ var newMessage = function(recipientId, message, context, key) {
     recipientId,
     message, // es6 syntax, same as - message: message,
     context,
+    key,
   });
-
-  if(key)
-    body.key=key;
 
   console.log('sending feedback to dashboard:', body)
 
