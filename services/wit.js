@@ -183,12 +183,11 @@ var actions = {
     }
 
 		// Retrieve the sentiment
-		// var sentiment = firstEntityValue(entities, 'sentiment')
-		// if (sentiment) {
-		// 	context.ack = sentiment
-		// } else {
-		// 	delete context.ack
-		// }
+		var sentiment = firstEntityValue(entities, 'sentiment')
+		if (sentiment) {
+      context.feedback = text
+			context.feedbackSentiment = sentiment
+		}
 
     return Promise.resolve(context);
 	},
