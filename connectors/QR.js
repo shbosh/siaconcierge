@@ -19,7 +19,6 @@ const getFlightClass = classLetter => {
   }
 }
 
-// SETUP A REQUEST TO DASHBOARD
 var decode = function(url) {
 
   return fetch("http://api.qrserver.com/v1/read-qr-code/?fileurl="+ encodeURIComponent(url))

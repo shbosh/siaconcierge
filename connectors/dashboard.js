@@ -5,12 +5,12 @@ var Config = require('../config')
 const fetch = require('node-fetch');
 
 // SETUP A REQUEST TO DASHBOARD
-var newMessage = function(recipientId, message, sentiment) {
+var newMessage = function(recipientId, message, context) {
 
   const body = JSON.stringify({
     recipientId,
     message, // es6 syntax, same as - message: message,
-    sentiment,
+    context,
   });
 
   console.log('sending feedback to dashboard:', body)
