@@ -20,18 +20,18 @@ var getMessageEntry = function (body) {
 }
 
 // SETUP A REQUEST TO FACEBOOK SERVER
-var newMessage = function(recipientId, msg, hasAtts, cb) {
+var newMessage = function(recipientId, msg, hasAtts, hasQuick) {
 
   let message;
   if (hasAtts) {
     message = {
       attachment: {
         "type": "image",
-        "payload": {
-          "url": msg
-        }
+        "payload": { "url": msg }
       }
     }
+  } else if (hasQuick) {
+    message = { text: msg, quickreplies: hasQuick }
   } else {
     message = { text: msg }
   }

@@ -31,7 +31,6 @@ var findOrCreateSession = function (fbid, passengerData) {
         passengerData
       }
     }
-    console.log(sessions)
     console.log('user does not exists, created session for ', fbid)
   }
 
@@ -51,11 +50,15 @@ var read = function (sender, message, passengerData, announceMsg) {
       //   FB.newMessage(sessionObj.fbid, announceMsg.msg)
       // }
       if (announceMsg.posttype == "flightdelay") {
-        FB.newMessage(sessionObj.fbid, "Dear passenger, your flight has been delayed to " + announceMsg.val + ". Sorry for the inconvenience caused.");
+        FB.newMessage(sessionObj.fbid, "Dear passenger, your flight has been delayed to " + announceMsg.val + ". We are sorry for any inconvenience caused.");
       } else if (announceMsg.posttype == "startflight") {
-        FB.newMessage(sessionObj.fbid, "Welcome to Singapore Airlines. To get assistance from our flight attendants, please type in this format => Req: <Your Request>");;
+        FB.newMessage(sessionObj.fbid, "Welcome to Singapore Airlines. Anytime you would assistance from our flight attendants, please type 'Req: <Your Request>'");;
       } else if (announceMsg.posttype == "endflight") {
-        FB.newMessage(sessionObj.fbid, "We have reached your destination. We will appreciate it alot if you can leave us a feedback. Have a great trip!");
+        const quickreplies =[
+          {"content_type":"text","title":"Leave feedback.","payload":"I would like to leave some feedback."},
+          {"content_type":"text","title":"No thanks.","payload":"No thanks, goodbye!"}
+        ]
+        FB.newMessage(sessionObj.fbid, "We have reached your destination. Have a great trip! We would appreciate it a lot if you can leave us some feedback.", null, quickreplies);
       }
     })
 

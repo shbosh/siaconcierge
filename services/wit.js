@@ -79,11 +79,11 @@ var actions = {
 			context.time = time
 		}
 
-		//Inflight Requests
-		var time = firstEntityValue(entities, 'intent')
-		if (time) {
-			context.time = time
-		}
+		// //Inflight Requests
+		// var time = firstEntityValue(entities, 'intent')
+		// if (time) {
+		// 	context.time = time
+		// }
 
 		// Retrieve Requests
 		var request = firstEntityValue(entities, 'request')
@@ -97,10 +97,16 @@ var actions = {
 			context.cat = category
 		}
 
+    // Retrieve the rating
+    var rating = firstEntityValue(entities, 'rating')
+    if (rating) {
+      context.rating = rating
+    }
+
 		// Retrieve the sentiment
 		var sentiment = firstEntityValue(entities, 'sentiment')
 		if (sentiment) {
-			context.ack = sentiment === 'positive' ? 'Glad your liked it!' : 'Aww, that sucks.'
+			context.ack = sentiment
 		} else {
 			delete context.ack
 		}
@@ -142,6 +148,7 @@ var actions = {
 
 	['fetch-luggagelimit']({sessionId, context}) {
 		var lugg = "50kg"
+    console.log(context)
 		context.luggagelim = lugg
     return Promise.resolve(context);
 
