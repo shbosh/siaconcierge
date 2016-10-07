@@ -62,7 +62,7 @@ var actions = {
                 {
                   "title":"Welcome to Peter\'s Hats",
                   "item_url":"https://petersfancybrownhats.com",
-                  "image_url":"https://petersfancybrownhats.com/company_image.png",
+                  "image_url":"http://www.thinkgeek.com/images/products/zoom/11af_4th_doctors_hat.jpg",
                   "subtitle":"We\'ve got the right hat for everyone.",
                   "buttons":[
                     {
@@ -75,7 +75,7 @@ var actions = {
                 {
                   "title":"Welcome to Peter\'s Hats",
                   "item_url":"https://petersfancybrownhats.com",
-                  "image_url":"https://petersapparel.com/img/shirt.png",
+                  "image_url":"http://www.projectmanagement.com/design/hat.jpg",
                   "subtitle":"We\'ve got the right shirts for everyone.",
                   "buttons":[
                     {
@@ -102,9 +102,11 @@ var actions = {
         }
 
         if(quickreplies){
-          return FB.newMessage(recipientId, resText, null, quickreplies.map(reply => {
+          var mapquickreplies = quickreplies.map(reply => {
             return {"content_type":"text", "title": reply, "payload": reply}
-          })).then(() => null).catch(errorHandler)
+          });
+          console.log(mapquickreplies)
+          return FB.newMessage(recipientId, resText, null, mapquickreplies).then(() => null).catch(errorHandler)
         }
 
         return FB.newMessage(recipientId, resText)
