@@ -41,11 +41,12 @@ app.post('/webhook', function (req, res) {
   // IS THE ENTRY A VALID MESSAGE?
   if (entry && entry.message) {
     if (entry.message.attachments) {
-      // NOT SMART ENOUGH FOR ATTACHMENTS YET
+
+      // GET IMAGE OF QR CODE & DECODE
       const imageUrl = entry.message.attachments[0].payload.url;
 
       QR.decode(imageUrl).then(psgr => {
-        Bot.read(entry.sender.id, entry.message.text, psgr)
+        Bot.read(entry.sender.id, "__VERIFIED__", psgr)
 
         const reply = `Hello ${psgr.fullName}, are you taking ${psgr.airline} (${psgr.airlineCode + ' ' + psgr.flightNum}, Booking Ref: ${psgr.bookingRef}) from ${psgr.from} to ${psgr.to}? `
         const quickreplies =[

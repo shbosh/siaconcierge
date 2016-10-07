@@ -56,7 +56,7 @@ var actions = {
   },
 
   // Merge action as found on wit.ai story, returns a js promise with new context
-	merge({sessionId, context, message, entities}) {
+	merge({sessionId, context, entities}) {
     console.log(`Session ${sessionId} received`);
     console.log(`The current context is ${JSON.stringify(context)}`);
     console.log(`Wit extracted ${JSON.stringify(entities)}`);
@@ -117,6 +117,19 @@ var actions = {
 	error({sessionId, context, error}) {
 		console.log(error.message)
 	},
+
+  verified({sessionId, context, text, entities}) {
+
+    console.log(text)
+    console.log(entities)
+    console.log(context)
+    var ver = firstEntityValue(entities, 'VERIFIED')
+    if (ver) {
+      context.ver = ver
+    }
+    return Promise.resolve(context);
+
+  },
 
 	// list of functions Wit.ai can execute
 	['fetch-weather']({sessionId, context}) {
