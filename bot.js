@@ -34,6 +34,18 @@ var findOrCreateSession = function (fbid, passengerData) {
     console.log('user does not exists, created session for ', fbid)
   }
 
+  if (passengerData) {
+    sessionId = new Date().toISOString()
+    sessions[sessionId] = {
+      fbid: fbid,
+      flightId: passengerData.flightDate + passengerData.flightNum,
+      context: {
+        _fbid_: fbid,
+        passengerData
+      }
+    }
+    console.log('user already exists, created new session for ', fbid)
+  }
   return sessionId
 }
 
