@@ -113,6 +113,13 @@ var actions = {
     var faq = firstEntityValue(entities, 'faq')
     if (faq) {
       context.faq = text
+
+      // send restricted items picture
+      if(context.message.substring(0,33) === "Please check the prohibited items") {
+        const restrictedPic = "https://www.singaporeair.com/en_UK/us/travel-info/baggage/baggage-restrictions/saar5/images/travel-info/baggages/prohibited-items.jpg";
+        FB.newMessage(recipientId, restrictedPic, true)
+        .then(() => null).catch(errorHandler)
+      }
     }
 
     // Check for feedback
@@ -122,12 +129,12 @@ var actions = {
     }
 
 		// Retrieve the sentiment
-		var sentiment = firstEntityValue(entities, 'sentiment')
-		if (sentiment) {
-			context.ack = sentiment
-		} else {
-			delete context.ack
-		}
+		// var sentiment = firstEntityValue(entities, 'sentiment')
+		// if (sentiment) {
+		// 	context.ack = sentiment
+		// } else {
+		// 	delete context.ack
+		// }
 
     return Promise.resolve(context);
 	},
