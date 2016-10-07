@@ -41,8 +41,14 @@ var actions = {
         .then(() => null).catch(errorHandler)
 
       } else {
-        const sentiment = Math.floor(Math.random()) == 1 ? 'positive' : 'negative';
-        Dashboard.newMessage(recipientId, resText, sentiment);
+        // const sentiment = Math.floor(Math.random()) == 1 ? 'positive' : 'negative';
+        const {faq, rawrequest, feedback, rating} = context;
+        console.log('faq', faq)
+        console.log('rawrequest', rawrequest)
+        console.log('feedback', feedback)
+        console.log('rating', rating)
+        if(faq || rawrequest || feedback || feedback)
+          Dashboard.newMessage(recipientId, resText, context);
 
         return FB.newMessage(recipientId, resText)
         .then(() => null).catch(errorHandler)
@@ -56,7 +62,7 @@ var actions = {
   },
 
   // Merge action as found on wit.ai story, returns a js promise with new context
-	merge({sessionId, context, entities}) {
+	merge({sessionId, context, entities, text}) {
     console.log(`Session ${sessionId} received`);
     console.log(`The current context is ${JSON.stringify(context)}`);
     console.log(`Wit extracted ${JSON.stringify(entities)}`);
@@ -100,7 +106,19 @@ var actions = {
     // Retrieve the rating
     var rating = firstEntityValue(entities, 'rating')
     if (rating) {
-      context.rating = rating
+      context.rating = parseInt(text)
+    }
+
+    // Check for faq
+    var faq = firstEntityValue(entities, 'faq')
+    if (faq) {
+      context.faq = text
+    }
+
+    // Check for feedback
+    var feedback = firstEntityValue(entities, 'feedback')
+    if (feedback) {
+      context.feedback = text
     }
 
 		// Retrieve the sentiment
@@ -120,9 +138,6 @@ var actions = {
 
   verified({sessionId, context, text, entities}) {
 
-    console.log(text)
-    console.log(entities)
-    console.log(context)
     var ver = firstEntityValue(entities, 'VERIFIED')
     if (ver) {
       context.ver = ver
@@ -162,7 +177,8 @@ var actions = {
 	['fetch-luggagelimit']({sessionId, context}) {
 		var lugg = "50kg"
     console.log(context)
-		context.luggagelim = lugg
+    context.luggagelim = lugg
+		context.passengerClass = context.passengerData.flightClass
     return Promise.resolve(context);
 
 	},
