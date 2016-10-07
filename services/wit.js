@@ -50,6 +50,13 @@ var actions = {
         if(faq || rawrequest || feedback || feedback)
           Dashboard.newMessage(recipientId, resText, context);
 
+        // send restricted items picture
+        if(resText.substring(0,33) === "Please check the prohibited items") {
+          const restrictedPic = "https://www.singaporeair.com/en_UK/us/travel-info/baggage/baggage-restrictions/saar5/images/travel-info/baggages/prohibited-items.jpg";
+          FB.newMessage(recipientId, restrictedPic, true)
+          .then(() => null).catch(errorHandler)
+        }
+
         return FB.newMessage(recipientId, resText)
         .then(() => null).catch(errorHandler)
       }
@@ -113,13 +120,6 @@ var actions = {
     var faq = firstEntityValue(entities, 'faq')
     if (faq) {
       context.faq = text
-
-      // send restricted items picture
-      if(context.message.substring(0,33) === "Please check the prohibited items") {
-        const restrictedPic = "https://www.singaporeair.com/en_UK/us/travel-info/baggage/baggage-restrictions/saar5/images/travel-info/baggages/prohibited-items.jpg";
-        FB.newMessage(recipientId, restrictedPic, true)
-        .then(() => null).catch(errorHandler)
-      }
     }
 
     // Check for feedback
